@@ -1,8 +1,9 @@
 //INFO: quickly prototype/deploy apps using phonegap & loading from url/sdcard
 enAppMovil= true;
 GLOBAL= this.GLOBAL || this;
-CfgUser= GLOBAL.CfgUser || "XxxUser";
-CfgPass= GLOBAL.CfgPass || "XxxPass";
+Cfg= GLOBAL.Cfg || {};
+Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
+Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
 
 //S: base 
 function ensureInit(k,v,scope) { //D: ensure k exists in scope initializing with "v" if it didn't
@@ -177,7 +178,7 @@ function getHttp(url,reqdata,cbok,cbfail) {
 	$.ajax({ url: url, data: reqdata,
 		cache: false,
 		dataType: 'text', //A: don't eval or process data
-		headers: { "Authorization": "Basic " + btoa( CfgUser + ":" + CfgPass) }, 
+		headers: { "Authorization": "Basic " + btoa( Cfg.User + ":" + Cfg.Pass) }, 
 		beforeSend: function (jqXHR, settings) { //A: for binary downloads
       jqXHR.overrideMimeType('text/plain; charset=x-user-defined');
     },
