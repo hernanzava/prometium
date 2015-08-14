@@ -271,7 +271,7 @@ function rtInit() {
 		Cfg.User= iusr.val(); Cfg.Pass= ipass.val(); var iv= Cfg.VersionStr= iversion.val();
 		//XXX: agregar que si empieza con "{" parsee como json asi podemos tener muchos parametros en un solo string y no hace falta andar tipeando para las pruebas
 		if (iv[0]=="{") { //A: json con opciones
-			var opts= ser_json_r(iv);
+			var opts= JSON.parse(iv);
 			var k;
 			var cfgLibOver= opts.CFGLIB;
 			if (cfgLibOver) { for (k in cfgLibOver) { CFGLIB[k]= cfgLibOver[k]; } };
