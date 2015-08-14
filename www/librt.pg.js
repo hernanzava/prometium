@@ -279,7 +279,9 @@ function rtInit() {
 			var cfgOver= opts.CFG;
 			if (cfgOver) { for (k in cfgOver) { Cfg[k]= cfgOver[k]; } };
 			if (opts.js) { meval(opts.js); } //XXX:SEC ojo produccion, le podria pasar un js que borre toda la tarjeta sd :P
-		}
+            alert("appUrl" + CFGLIB.appUrl + "   path" + CFGLIB.pathDfltInLib);
+            
+        }
 		else { //A: formato separando con :
 			var m= /([^:]*):?([^:]*):?(\S*)/.exec(iv);
 			if (m[3]) { CFGLIB.appUrl= m[3]+'/js' }
