@@ -194,12 +194,7 @@ CFGLIB.pathDfltInLib="a/";
 
 function evalFile(name,failSilently,cbok,cbfail) { 
 	getFile(CFGLIB.pathToLib+name,"txt",function (srce) { try {
-        var src = {};
-        if(!CFGLIB.encript){
-            src = encriptar_r(srce,SRC_KEY);
-        }else{
-            src = srce;
-        }
+        var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
 		var r= evalm(src+' //# sourceURL='+name,failSilently); cbok(r); 
 	} catch (ex) { logm("ERR",1,"evalFile "+str(ex)); }},cbfail);
 }
@@ -212,12 +207,7 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 
 function getHttpToDflt(fname,url,cbok,cbfail) {
 	getHttp(url,{},function (d) { try {
-        var de = {};
-        if(!CFGLIB.encript){
-            de= encriptar(d,SRC_KEY);
-        }else{
-            de = d;
-        }
+        var de = !CFGLIB.noenc ? encriptar(d,SRC_KEY) : d;
 		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
 	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
 }
@@ -278,9 +268,6 @@ function rtInit() {
             if (cfgLibOver) { 
                 for (k in cfgLibOver) { 
                     CFGLIB[k]= cfgLibOver[k];                
-                } 
-                if(cfgLibOver.appUrl){
-                    CFGLIB.appUrl = CFGLIB.appUrl + "/js";
                 }
             };
 	
@@ -294,7 +281,7 @@ function rtInit() {
             };
 			
             if (opts.js) { meval(opts.js); } //XXX:SEC ojo produccion, le podria pasar un js que borre toda la tarjeta sd :P
-            alert("appUrl" + CFGLIB.appUrl + "   path" + CFGLIB.pathDfltInLib);
+            alert(JSON.strigify({CFGLIB: CFGLIB, Cfg: Cfg}));
             
         }
 		else { //A: formato separando con :
