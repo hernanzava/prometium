@@ -274,11 +274,26 @@ function rtInit() {
 			var opts= JSON.parse(iv);
 			var k;
 			var cfgLibOver= opts.CFGLIB;
-			if (cfgLibOver) { for (k in cfgLibOver) { CFGLIB[k]= cfgLibOver[k]; } };
-				
+			
+            if (cfgLibOver) { 
+                for (k in cfgLibOver) { 
+                    CFGLIB[k]= cfgLibOver[k];                
+                } 
+                if(cfgLibOver.appUrl){
+                    CFGLIB.appUrl = CFGLIB.appUrl + "/js";
+                }
+            };
+	
+            
 			var cfgOver= opts.CFG;
-			if (cfgOver) { for (k in cfgOver) { Cfg[k]= cfgOver[k]; } };
-			if (opts.js) { meval(opts.js); } //XXX:SEC ojo produccion, le podria pasar un js que borre toda la tarjeta sd :P
+			if (cfgOver) { 
+                for (k in cfgOver) { 
+                    Cfg[k]= cfgOver[k]; 
+                }
+                
+            };
+			
+            if (opts.js) { meval(opts.js); } //XXX:SEC ojo produccion, le podria pasar un js que borre toda la tarjeta sd :P
             alert("appUrl" + CFGLIB.appUrl + "   path" + CFGLIB.pathDfltInLib);
             
         }
