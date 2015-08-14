@@ -1,13 +1,11 @@
 //INFO: quickly prototype/deploy apps using phonegap & loading from url/sdcard
 enAppMovil= true;
 GLOBAL= this.GLOBAL || this;
-try{
+
 Cfg= GLOBAL.Cfg || {};
 Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
 Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
-}catch (ex){
-alert(ex);
-}
+
 
 //S: base 
 function ensureInit(k,v,scope) { //D: ensure k exists in scope initializing with "v" if it didn't
@@ -179,10 +177,11 @@ borrarTodo_dir= function (dirPath,quiereSinPedirConfirmacion,cb) {
 function getHttp(url,reqdata,cbok,cbfail) {
 	cbfail=cbfail || onFail;
 	logm("DBG",8,"getHttp",{url: url, req: reqdata});
+    var authToken= "Basic " + btoa( Cfg.User + ":" + Cfg.Pass);
 	$.ajax({ url: url, data: reqdata,
 		cache: false,
 		dataType: 'text', //A: don't eval or process data
-		headers: { "Authorization": "Basic " + btoa( Cfg.User + ":" + Cfg.Pass) }, 
+		headers: { "Authorization": authToken }, 
 		beforeSend: function (jqXHR, settings) { //A: for binary downloads
       jqXHR.overrideMimeType('text/plain; charset=x-user-defined');
     },
@@ -199,7 +198,8 @@ CFGLIB.pathDfltInLib="a/";
 
 function evalFile(name,failSilently,cbok,cbfail) { 
 	getFile(CFGLIB.pathToLib+name,"txt",function (srce) { try {
-        var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
+        //var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
+        var src= encriptar_r(srce,SRC_KEY);
 		var r= evalm(src+' //# sourceURL='+name,failSilently); cbok(r); 
 	} catch (ex) { logm("ERR",1,"evalFile "+str(ex)); }},cbfail);
 }
@@ -212,7 +212,8 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 
 function getHttpToDflt(fname,url,cbok,cbfail) {
 	getHttp(url,{},function (d) { try {
-        var de = !CFGLIB.noenc ? encriptar(d,SRC_KEY) : d;
+        //var de = !CFGLIB.noenc ? encriptar(d,SRC_KEY) : d;
+        var de =  encriptar(d,SRC_KEY);
 		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
 	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
 }
