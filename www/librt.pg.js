@@ -2,10 +2,9 @@
 enAppMovil= true;
 GLOBAL= this.GLOBAL || this;
 
-//Cfg= GLOBAL.Cfg || {};
-//Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
-//Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
-
+Cfg= GLOBAL.Cfg || {};
+Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
+Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
 
 //S: base 
 function ensureInit(k,v,scope) { //D: ensure k exists in scope initializing with "v" if it didn't
@@ -199,7 +198,13 @@ CFGLIB.pathDfltInLib="a/";
 function evalFile(name,failSilently,cbok,cbfail) { 
 	getFile(CFGLIB.pathToLib+name,"txt",function (srce) { try {
         //var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
-        var src= encriptar_r(srce,SRC_KEY);
+        var src;
+        if(!CFGLIB.noenc){
+            src = encriptar_r(srce,SRC_KEY);
+        }else{ 
+            src = srce;
+        }
+        //var src= encriptar_r(srce,SRC_KEY);
 		var r= evalm(src+' //# sourceURL='+name,failSilently); cbok(r); 
 	} catch (ex) { logm("ERR",1,"evalFile "+str(ex)); }},cbfail);
 }
@@ -212,8 +217,12 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 
 function getHttpToDflt(fname,url,cbok,cbfail) {
 	getHttp(url,{},function (d) { try {
-        //var de = !CFGLIB.noenc ? encriptar(d,SRC_KEY) : d;
-        var de =  encriptar(d,SRC_KEY);
+        var de;
+        if(!CFGLIB.noenc){
+            de = encriptar(d,SRC_KEY);
+        }else{ 
+            de = d;
+        }
 		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
 	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
 }
@@ -226,7 +235,7 @@ function evalUpdated(name,cbok,cbfail) {
 
 //S: init
 //CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
-CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/js/Map';
+CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/Map';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 
@@ -292,11 +301,15 @@ function rtInit() {
             
         }
 		else { //A: formato separando con :
-			var m= /([^:]*):?([^:]*):?(\S*)/.exec(iv);
-			if (m[3]) { CFGLIB.appUrl= m[3]+'/js' }
-			var md;
-			if (md= /d(\d?)/.exec(m[2])) { CFGLIB.loglvlmax= parseInt(md[1])||9; }
-			CFGLIB.appUrl+= m[1];	
+		    var m = /([^:]*):?([^:]*):?(\S*)/.exec(iv);
+		    if (m[3]) {
+		        CFGLIB.appUrl = m[3] + '/js'
+		    }
+		    var md;
+		    if (md = /d(\d?)/.exec(m[2])) {
+		        CFGLIB.loglvlmax = parseInt(md[1]) || 9;
+		    }
+		    CFGLIB.appUrl += m[1];
 		}
 		//XXX:SEC: cambiar PathToLib segun version para que no se pueda bajar una version de un host y acceder a los datos de otra? relacion con encriptar datos bajados?
 		//alert("Cfg "+ser_json(CFGLIB));
