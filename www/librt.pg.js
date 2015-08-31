@@ -195,18 +195,24 @@ function getHttp(url,reqdata,cbok,cbfail) {
 CFGLIB.pathToLib="pm/pg/";
 CFGLIB.pathDfltInLib="a/";
 
-function evalFile(name,failSilently,cbok,cbfail) { 
-	getFile(CFGLIB.pathToLib+name,"txt",function (srce) { try {
-        //var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
-        var src;
-        if(!CFGLIB.noenc){
-            src = encriptar_r(srce,SRC_KEY);
-        }else{ 
-            src = srce;
+function evalFile(name, failSilently, cbok, cbfail) {
+    getFile(CFGLIB.pathToLib + name, "txt", function (srce) {
+        try {
+            //var src = (!CFGLIB.noenc) ? encriptar_r(srce,SRC_KEY) : srce;
+            var src;
+            if (!CFGLIB.noenc) {
+                logm("DBG",1,"ENCRIPTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",null);
+                src = encriptar_r(srce, SRC_KEY);
+            } else {
+                src = srce;
+            }
+            //var src= encriptar_r(srce,SRC_KEY);
+            var r = evalm(src + ' //# sourceURL=' + name, failSilently);
+            cbok(r);
+        } catch (ex) {
+            logm("ERR", 1, "evalFile " + str(ex));
         }
-        //var src= encriptar_r(srce,SRC_KEY);
-		var r= evalm(src+' //# sourceURL='+name,failSilently); cbok(r); 
-	} catch (ex) { logm("ERR",1,"evalFile "+str(ex)); }},cbfail);
+    }, cbfail);
 }
 
 function evalFileOrDflt(name,failSilently,cbok,cbfail) {
@@ -238,15 +244,19 @@ function evalUpdated(name,cbok,cbfail) {
 CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/Map';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
-
 function runApp() { //XXX:generalizar usando evalUpdated
-	logm("DBG",1,"RUN APP "+ser_json(Cfg)+" "+ser_json(CFGLIB));
-	var s0= function () { getHttpToDflt('app.js',CFGLIB.appUrl,s1,s1); }
-	var s1= function () { evalFile(CFGLIB.pathDfltInLib+'app.js',false,nullf,function (err) {
-		alert("Error iniciando paso 2, ingresó los datos correctos? ("+str(err)+")");
-		LibAppStarted= false; rtInit();
-	}); }
-	setFileDir(CFGLIB.pathToLib+CFGLIB.pathDfltInLib,s0,onFailAlert);
+    logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
+    var s0 = function () {
+        getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
+    }
+    var s1 = function () {
+        evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
+            alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
+            LibAppStarted = false;
+            rtInit();
+        });
+    }
+    setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
 }
 
 ensureInit("LibAppStarted",false,this);
