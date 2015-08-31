@@ -225,7 +225,8 @@ function evalUpdated(name,cbok,cbfail) {
 }
 
 //S: init
-CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
+//CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
+CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/js/Map';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 
