@@ -2,9 +2,9 @@
 enAppMovil= true;
 GLOBAL= this.GLOBAL || this;
 
-Cfg= GLOBAL.Cfg || {};
-Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
-Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
+//Cfg= GLOBAL.Cfg || {};
+//Cfg.User= CfgUser= GLOBAL.CfgUser || "XxxUser";
+//Cfg.Pass= CfgPass= GLOBAL.CfgPass || "XxxPass";
 
 
 //S: base 
