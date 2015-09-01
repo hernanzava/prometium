@@ -25,15 +25,20 @@ function str(x) {
 	return r;
 }
 
-function evalm(src,failSilently) {
-	logm("DBG",9,"EVALM",src);
-	var r;
-	try { r = window.eval(src); logm("DBG",9,"EVALM",[r,src]); }
-	catch (ex) {
-		logm("ERR",failSilently ? 9 : 0,"EVALM",[ex.message,src]); 
-		if (!failSilently) { throw(ex); }
-	}	
-	return r;
+
+function evalm(src, failSilently) {
+    logm("DBG", 9, "EVALM", src);
+    var r;
+    try {
+        r = window.eval(src);
+        logm("DBG", 9, "EVALM", [r, src]);
+    } catch (ex) {
+        logm("ERR", failSilently ? 9 : 0, "EVALM MESSAGE" + ex.message, ex);
+        if (!failSilently) {
+            throw (ex);
+        }
+    }
+    return r;
 }
 
 function strToBin(d) {
