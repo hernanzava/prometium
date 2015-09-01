@@ -205,7 +205,8 @@ CFGLIB.pathDfltInLib="a/";
 function evalFile(name, failSilently, cbok, cbfail) {
     getFile(CFGLIB.pathToLib + name, "txt", function (srce) {
         try {
-            var src= encriptar_r(srce,SRC_KEY);
+            //var src= encriptar_r(srce,SRC_KEY);
+            var src= srce;
             var r = evalm(src + ' //# sourceURL=' + name, failSilently);
             cbok(r);
         } catch (ex) {
@@ -223,8 +224,8 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 function getHttpToDflt(fname, url, cbok, cbfail) {
     getHttp(url, {}, function (d) {
         try {
-            var de = encriptar(d, SRC_KEY);
-
+            //var de = encriptar(d, SRC_KEY);
+            var de = d;
             setFile(CFGLIB.pathToLib + CFGLIB.pathDfltInLib + fname, de, cbok, cbok);
         } catch (ex) {
             logm("ERR", 1, "getHttpToDflt setFile " + str(ex));
@@ -232,10 +233,14 @@ function getHttpToDflt(fname, url, cbok, cbfail) {
     }, cbfail);
 }
 
-function evalUpdated(name,cbok,cbfail) {
-	var s0= function () { getHttpToDflt(name,CFGLIB.cfgurl+name,s1,s1); }
-	var s1= function () { evalFileOrDflt(name,false,cbok,cbfail); }
-	s0();
+function evalUpdated(name, cbok, cbfail) {
+    var s0 = function () {
+        getHttpToDflt(name, CFGLIB.cfgurl + name, s1, s1);
+    };
+    var s1 = function () {
+        evalFileOrDflt(name, false, cbok, cbfail);
+    };
+    s0();
 }
 
 //S: init
