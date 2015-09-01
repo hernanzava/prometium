@@ -261,9 +261,9 @@ function rtInit() {
 	//D: pantalla inicial ofreciendo Run, Run con debug (alerts) y bajarse la app
 	var con= $('#con'); con.html('');
 	var form= $('<div style="font-size: 2em; text-align: center;"/>'); con.append(form);
-	var iusr=$('<input placeholder="usuario">').val("user");
-	var ipass=$('<input placeholder="clave">').val("123");
-	var iversion=$('<input placeholder="version">').val(":db9");
+	var iusr=$('<input placeholder="usuario" value="user">');
+	var ipass=$('<input placeholder="clave" value="123">');
+	var iversion=$('<input placeholder="version" value=":db9">');
 	var bgo=$('<button>Iniciar</buton>');
 	var bgx=$('<button>Salir</buton>');
 	var bgc=$('<a href="#">(borrar datos locales)</a>');
