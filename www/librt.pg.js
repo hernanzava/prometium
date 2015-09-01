@@ -172,12 +172,14 @@ borrarTodo_dir= function (dirPath,quiereSinPedirConfirmacion,cb) {
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFs, onFail);
 }
 
-//S: http
+//S: http-----getHttp(CFGLIB.appUrl,{},encriptar,cbfail )
 function getHttp(url,reqdata,cbok,cbfail) {
 	cbfail=cbfail || onFail;
 	logm("DBG",8,"getHttp",{url: url, req: reqdata});
     var authToken= "Basic " + btoa( Cfg.User + ":" + Cfg.Pass);
-	$.ajax({ url: url, data: reqdata,
+	$.ajax({ 
+        url: url, 
+        data: reqdata,
 		cache: false,
 		dataType: 'text', //A: don't eval or process data
 		headers: { "Authorization": authToken }, 
@@ -212,13 +214,17 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 	var s1f= function () { evalFile(CFGLIB.pathDfltInLib+name,failSilently,cbok,cbfail); }
 	s0();
 }
+//getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1); 
+function getHttpToDflt(fname, url, cbok, cbfail) {
+    getHttp(url, {}, function (d) {
+        try {
+            var de = encriptar(d, SRC_KEY);
 
-function getHttpToDflt(fname,url,cbok,cbfail) {
-	getHttp(url,{},function (d) { try {
-        var de = encriptar(d,SRC_KEY);
-        
-		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
-	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
+            setFile(CFGLIB.pathToLib + CFGLIB.pathDfltInLib + fname, de, cbok, cbok);
+        } catch (ex) {
+            logm("ERR", 1, "getHttpToDflt setFile " + str(ex));
+        }
+    }, cbfail);
 }
 
 function evalUpdated(name,cbok,cbfail) {
@@ -229,21 +235,21 @@ function evalUpdated(name,cbok,cbfail) {
 
 //S: init
 //CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
-CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/Map';
+CFG_APPURL_DFLT= 'https://10.70.251.49:8443/app/fMap';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
     var s0 = function () {
         getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
-    }
+    };
     var s1 = function () {
         evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
             alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
             LibAppStarted = false;
             rtInit();
         });
-    }
+    };
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
 }
 
