@@ -207,7 +207,8 @@ function evalFile(name, failSilently, cbok, cbfail) {
         try {
             //var src= encriptar_r(srce,SRC_KEY);
             var src= srce;
-            var r = evalm(src + ' //# sourceURL=' + name, failSilently);
+            //var r = evalm(src + ' //# sourceURL=' + name, failSilently);
+            var r = src;
             cbok(r);
         } catch (ex) {
             logm("ERR", 1, "evalFile " + str(ex));
