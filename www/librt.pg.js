@@ -25,20 +25,15 @@ function str(x) {
 	return r;
 }
 
-
-function evalm(src, failSilently) {
-    logm("DBG", 9, "EVALM", src);
-    var r;
-    try {
-        r = window.eval(src);
-        logm("DBG", 9, "EVALM", [r, src]);
-    } catch (ex) {
-        logm("ERR", failSilently ? 9 : 0, "EVALM MESSAGE" + ex.message, ex);
-        if (!failSilently) {
-            throw (ex);
-        }
-    }
-    return r;
+function evalm(src,failSilently) {
+	logm("DBG",9,"EVALM",src);
+	var r;
+	try { r = window.eval(src); logm("DBG",9,"EVALM",[r,src]); }
+	catch (ex) {
+		logm("ERR",failSilently ? 9 : 0,"EVALM",[ex.message,src]); 
+		if (!failSilently) { throw(ex); }
+	}	
+	return r;
 }
 
 function strToBin(d) {
@@ -177,14 +172,12 @@ borrarTodo_dir= function (dirPath,quiereSinPedirConfirmacion,cb) {
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFs, onFail);
 }
 
-//S: http-----getHttp(CFGLIB.appUrl,{},encriptar,cbfail )
+//S: http
 function getHttp(url,reqdata,cbok,cbfail) {
 	cbfail=cbfail || onFail;
 	logm("DBG",8,"getHttp",{url: url, req: reqdata});
     var authToken= "Basic " + btoa( Cfg.User + ":" + Cfg.Pass);
-	$.ajax({ 
-        url: url, 
-        data: reqdata,
+	$.ajax({ url: url, data: reqdata,
 		cache: false,
 		dataType: 'text', //A: don't eval or process data
 		headers: { "Authorization": authToken }, 
@@ -205,10 +198,14 @@ CFGLIB.pathDfltInLib="a/";
 function evalFile(name, failSilently, cbok, cbfail) {
     getFile(CFGLIB.pathToLib + name, "txt", function (srce) {
         try {
-            //var src= encriptar_r(srce,SRC_KEY);
-            var src= srce;
-            //var r = evalm(src + ' //# sourceURL=' + name, failSilently);
-            var r = src;
+            var src={};
+            if(!CFGLIB.noenc){
+                src= encriptar_r(srce,SRC_KEY);
+            }else{
+                src= encriptar_r(srce,SRC_KEY);
+            }
+            
+            var r = evalm(src + ' //# sourceURL=' + name, failSilently);
             cbok(r);
         } catch (ex) {
             logm("ERR", 1, "evalFile " + str(ex));
@@ -221,46 +218,44 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 	var s1f= function () { evalFile(CFGLIB.pathDfltInLib+name,failSilently,cbok,cbfail); }
 	s0();
 }
-//getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1); 
-function getHttpToDflt(fname, url, cbok, cbfail) {
-    getHttp(url, {}, function (d) {
-        try {
-            //var de = encriptar(d, SRC_KEY);
-            var de = d;
-            setFile(CFGLIB.pathToLib + CFGLIB.pathDfltInLib + fname, de, cbok, cbok);
-        } catch (ex) {
-            logm("ERR", 1, "getHttpToDflt setFile " + str(ex));
+
+function getHttpToDflt(fname,url,cbok,cbfail) {
+	getHttp(url,{},function (d) { try {
+        var de = {};
+        if(!CFGLIB.noenc){
+            de = encriptar(d,SRC_KEY);
+        }else{
+            de = d;
         }
-    }, cbfail);
+        
+        
+		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
+	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
 }
 
-function evalUpdated(name, cbok, cbfail) {
-    var s0 = function () {
-        getHttpToDflt(name, CFGLIB.cfgurl + name, s1, s1);
-    };
-    var s1 = function () {
-        evalFileOrDflt(name, false, cbok, cbfail);
-    };
-    s0();
+function evalUpdated(name,cbok,cbfail) {
+	var s0= function () { getHttpToDflt(name,CFGLIB.cfgurl+name,s1,s1); }
+	var s1= function () { evalFileOrDflt(name,false,cbok,cbfail); }
+	s0();
 }
 
 //S: init
 //CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
-CFG_APPURL_DFLT= 'https://10.70.251.56:8443/app/Map';
+CFG_APPURL_DFLT= 'https://192.168.1.122:8443/app/Map';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
     var s0 = function () {
         getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
-    };
+    }
     var s1 = function () {
         evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
             alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
             LibAppStarted = false;
             rtInit();
         });
-    };
+    }
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
 }
 
@@ -271,10 +266,11 @@ function rtInit() {
 	CFGLIB.loglvlmax=0;	
 	//D: pantalla inicial ofreciendo Run, Run con debug (alerts) y bajarse la app
 	var con= $('#con'); con.html('');
-	var form= $('<div style="font-size: 2em; text-align: center;"/>'); con.append(form);
+	var form= $('<div style="font-size: 2em; text-align: center;"/>'); 
+    con.append(form);
 	var iusr=$('<input placeholder="usuario" value="user">');
 	var ipass=$('<input placeholder="clave" value="123">');
-	var iversion=$('<input placeholder="version" value=":db9">');
+	var iversion=$('<input placeholder="version">');
 	var bgo=$('<button>Iniciar</buton>');
 	var bgx=$('<button>Salir</buton>');
 	var bgc=$('<a href="#">(borrar datos locales)</a>');
