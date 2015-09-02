@@ -25,15 +25,21 @@ function str(x) {
 	return r;
 }
 
-function evalm(src,failSilently) {
-	logm("DBG",9,"EVALM",src);
-	var r;
-	try { r = window.eval(src); logm("DBG",9,"EVALM",[r,src]); }
-	catch (ex) {
-		logm("ERR",failSilently ? 9 : 0,"EVALM",[ex.message,src]); 
-		if (!failSilently) { throw(ex); }
-	}	
-	return r;
+function evalm(src, failSilently) {
+    logm("DBG", 9, "EVALM", src);
+    console.log("LA CONCHA DE TU MADRE ALL BOYY!!!");
+    var r;
+    try {
+        //r = window.eval(src);
+        r = eval(src);
+        logm("DBG", 9, "EVALM", [r, src]);
+    } catch (ex) {
+        logm("ERR", failSilently ? 9 : 0, "EVALM", [ex.message, src]);
+        if (!failSilently) {
+            throw (ex);
+        }
+    }
+    return r;
 }
 
 function strToBin(d) {
@@ -219,18 +225,20 @@ function evalFileOrDflt(name,failSilently,cbok,cbfail) {
 	s0();
 }
 
-function getHttpToDflt(fname,url,cbok,cbfail) {
-	getHttp(url,{},function (d) { try {
-        var de = {};
-        if(!CFGLIB.noenc){
-            de = encriptar(d,SRC_KEY);
-        }else{
-            de = d;
+function getHttpToDflt(fname, url, cbok, cbfail) {
+    getHttp(url, {}, function (d) {
+        try {
+            var de = {};
+            if (!CFGLIB.noenc) {
+                de = encriptar(d, SRC_KEY);
+            } else {
+                de = d;
+            }
+            setFile(CFGLIB.pathToLib + CFGLIB.pathDfltInLib + fname, de, cbok, cbok);
+        } catch (ex) {
+            logm("ERR", 1, "getHttpToDflt setFile " + str(ex))
         }
-        
-        
-		setFile(CFGLIB.pathToLib+CFGLIB.pathDfltInLib+fname,de,cbok,cbok);
-	} catch (ex) { logm("ERR",1,"getHttpToDflt setFile "+str(ex))}},cbfail);
+    }, cbfail);
 }
 
 function evalUpdated(name,cbok,cbfail) {
