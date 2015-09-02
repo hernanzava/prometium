@@ -27,11 +27,10 @@ function str(x) {
 
 function evalm(src, failSilently) {
     logm("DBG", 9, "EVALM", src);
-    console.log("LA CONCHA DE TU MADRE ALL BOYY!!!");
     var r;
     try {
         //r = window.eval(src);
-        r = eval(src);
+        r = (src);
         logm("DBG", 9, "EVALM", [r, src]);
     } catch (ex) {
         logm("ERR", failSilently ? 9 : 0, "EVALM", [ex.message, src]);
