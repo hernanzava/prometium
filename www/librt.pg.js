@@ -188,7 +188,7 @@ function getHttp(url,reqdata,cbok,cbfail) {
 	});
 	var authToken = "Basic " + btoa(Cfg.User + ":" + Cfg.Pass);
 	$.ajax({
-	    url:  'https://10.70.251.69:8443/app',
+	    url:  url,
 	    data: reqdata,
 	    cache: false,
 	    dataType: 'text', //A: don't eval or process data
