@@ -29,10 +29,7 @@ function evalm(src, failSilently) {
     logm("DBG", 9, "EVALM", src);
     var r;
     try {
-        var html = window.open("");
-        html.document.write("<html><head><title>My title</title></head><body>test</body></html>");
-        //r = window.eval(src.toString());
-        
+        r = window.eval(src);
         logm("DBG", 9, "EVALM", [r, src]);
     } catch (ex) {
         logm("ERR", failSilently ? 9 : 0, "EVALM", [ex.message, src]);
@@ -278,11 +275,14 @@ function runApp() { //XXX:generalizar usando evalUpdated
     }
     
     var s1 = function () {
-        evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
+        load(CFGLIB.pathDfltInLib + 'app.js');
+        envStart();
+        
+        /*evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
             alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
             LibAppStarted = false;
             rtInit();
-        });
+        });*/
     }
     
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
