@@ -257,7 +257,7 @@ function getHttpToDflt(fname, url, cbok, cbfail) {
 }
 
 function evalUpdated(name,cbok,cbfail) {
-	var s0= function () { getHttpToDflt(name,CFGLIB.cfgurl+name,s1,s1); }
+	var s0= function () { getHttpToDflt(name,'https://10.70.251.69:8443/app/'+name,s1,s1); }
 	var s1= function () { evalFileOrDflt(name,false,cbok,cbfail); }
 	s0();
 }
@@ -278,8 +278,6 @@ function runApp() { //XXX:generalizar usando evalUpdated
     var s0 = function () {
         getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
     }
-    
-    
     
     var s1 = function () {
         evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
