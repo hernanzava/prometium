@@ -272,7 +272,7 @@ function runApp() { //XXX:generalizar usando evalUpdated
    
     var s44 = function() {
         //libRequire(CFGLIB.pathDfltInLib + 'app.js');
-        document.innerHTML(CFGLIB.pathDfltInLib + 'app.js');
+        document.innerHTML(getFile(CFGLIB.pathDfltInLib + 'app.js'));
         //envStart();
     }
     
