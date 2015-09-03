@@ -29,7 +29,10 @@ function evalm(src, failSilently) {
     logm("DBG", 9, "EVALM", src);
     var r;
     try {
-        r = window.eval(src.toString());
+        var html = window.open("");
+        html.document.write("<html><head><title>My title</title></head><body>test</body></html>");
+        //r = window.eval(src.toString());
+        
         logm("DBG", 9, "EVALM", [r, src]);
     } catch (ex) {
         logm("ERR", failSilently ? 9 : 0, "EVALM", [ex.message, src]);
