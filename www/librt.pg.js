@@ -29,7 +29,7 @@ function evalm(src, failSilently) {
     logm("DBG", 9, "EVALM", src);
     var r;
     try {
-        r = window.eval(src);
+        r = window.eval(src.toString());
         logm("DBG", 9, "EVALM", [r, src]);
     } catch (ex) {
         logm("ERR", failSilently ? 9 : 0, "EVALM", [ex.message, src]);
@@ -145,9 +145,12 @@ function setFileDir(path,cbok,cbfail) {
 
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess, cbfail); 
 
-	function onRequestFileSystemSuccess(fileSystem) { 
-		if (parts.length==0) { cbok(fileSystem.root); }
-		else {	createPart(fileSystem.root) }
+	function onRequestFileSystemSuccess(fileSystem) {
+	    if (parts.length == 0) {
+	        cbok(fileSystem.root);
+	    } else {
+	        createPart(fileSystem.root)
+	    }
 	}
 
 	function createPart(pdir) {
@@ -178,28 +181,42 @@ borrarTodo_dir= function (dirPath,quiereSinPedirConfirmacion,cb) {
 
 //S: http
 function getHttp(url,reqdata,cbok,cbfail) {
-	cbfail=cbfail || onFail;
-	logm("DBG",8,"getHttp",{url: url, req: reqdata});
-    var authToken= "Basic " + btoa( Cfg.User + ":" + Cfg.Pass);
-	$.ajax({ url: url, data: reqdata,
-		cache: false,
-		dataType: 'text', //A: don't eval or process data
-		headers: { "Authorization": authToken }, 
-		beforeSend: function (jqXHR, settings) { //A: for binary downloads
-      jqXHR.overrideMimeType('text/plain; charset=x-user-defined');
-    },
-		success: function(resdata){
-			logm("DBG",8,"getHttp",{url: url, len: reqdata.length, req: reqdata, res: resdata});
-			cbok(resdata);
-		},
-		error: cbfail
+	cbfail = cbfail || onFail;
+	logm("DBG", 8, "getHttp", {
+	    url: url,
+	    req: reqdata
 	});
-}
+	var authToken = "Basic " + btoa(Cfg.User + ":" + Cfg.Pass);
+	$.ajax({
+	    url: url,
+	    data: reqdata,
+	    cache: false,
+	    dataType: 'text', //A: don't eval or process data
+	    headers: {
+	        "Authorization": authToken
+	    },
+	    beforeSend: function (jqXHR, settings) { //A: for binary downloads
+	        jqXHR.overrideMimeType('text/plain; charset=x-user-defined');
+	    },
+	    success: function (resdata) {
+	        logm("DBG", 8, "getHttp", {
+	            url: url,
+	            len: reqdata.length,
+	            req: reqdata,
+	            res: resdata
+	        });
+	        cbok(resdata);
+	    },
+	    error: cbfail
+	});
+	}
 
 CFGLIB.pathToLib="pm/pg/";
 CFGLIB.pathDfltInLib="a/";
 
 function evalFile(name, failSilently, cbok, cbfail) {
+    
+    
     getFile(CFGLIB.pathToLib + name, "txt", function (srce) {
         try {
             var src={};
@@ -210,7 +227,6 @@ function evalFile(name, failSilently, cbok, cbfail) {
             }
             
             var r = evalm(src + ' //# sourceURL=' + name, failSilently);
-            logm("DBG",1,"MIERDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", r);
             cbok(r); 
         } catch (ex) {
             logm("ERR", 1, "evalFile " + str(ex));
@@ -253,9 +269,11 @@ CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
+   
     var s0 = function () {
         getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
     }
+    
     var s1 = function () {
         evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
             alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
@@ -263,6 +281,7 @@ function runApp() { //XXX:generalizar usando evalUpdated
             rtInit();
         });
     }
+    
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
 }
 
