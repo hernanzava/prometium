@@ -188,7 +188,7 @@ function getHttp(url,reqdata,cbok,cbfail) {
 	});
 	var authToken = "Basic " + btoa(Cfg.User + ":" + Cfg.Pass);
 	$.ajax({
-	    url: url,
+	    url:  'https://10.70.251.69:8443/app/',
 	    data: reqdata,
 	    cache: false,
 	    dataType: 'text', //A: don't eval or process data
@@ -265,7 +265,6 @@ function evalUpdated(name,cbok,cbfail) {
 //S: init
 //CFG_APPURL_DFLT= 'https://rtmovil.enerminds.com:8443/app/js';
 CFG_APPURL_DFLT= 'https://10.70.251.69:8443/app/js';
-CFGLIB.cfgurl = 'https://10.70.251.69:8443/app/';
 CFGLIB.appUrl= CFG_APPURL_DFLT;
 SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
