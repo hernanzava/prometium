@@ -271,8 +271,9 @@ function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
    
     var s44 = function() {
-        libRequire(CFGLIB.pathDfltInLib + 'app.js');
-        envStart();
+        //libRequire(CFGLIB.pathDfltInLib + 'app.js');
+        document.innerHTML(CFGLIB.pathDfltInLib + 'app.js');
+        //envStart();
     }
     
     var s0 = function () {
