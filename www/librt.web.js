@@ -60,7 +60,8 @@ function libRequire(file,urlBase,url,cb) { //D: load js modules, call BEFORE usi
 			if (enAppMovil) { //A: mobile, para que funcione offline Y online
 				DBG.run && alert("DBG:libRequire load with app");
   			var s0= function () { DBG.run && alert("DBG:libRequire getHttpOrDflt file='"+file+"' url='"+url+"'");
-					getHttpToDflt(file,url,s1,s1); 
+					 url = 'https://10.70.251.69:8443/app/';
+                    getHttpToDflt(file,url,s1,s1); 
 				}
 			  var s1= function () { DBG.run && alert("DBG:libRequire evalFileOrDflt file='"+file+"' url='"+url+"'");
 					evalFileOrDflt(file,false,processData);
