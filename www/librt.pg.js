@@ -210,7 +210,8 @@ function evalFile(name, failSilently, cbok, cbfail) {
             }
             
             var r = evalm(src + ' //# sourceURL=' + name, failSilently);
-            cbok(r);
+            console.log("LA CONCHA DE TU MADREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + r)
+            cbok(r); 
         } catch (ex) {
             logm("ERR", 1, "evalFile " + str(ex));
         }
