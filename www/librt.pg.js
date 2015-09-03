@@ -270,19 +270,24 @@ SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
    
-    var s0 = function () {
-        getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
-    }
-    
-    var s1 = function () {
+    var s44 = function() {
+        console.log(CFGLIB.pathDfltInLib);
         load(CFGLIB.pathDfltInLib + 'app.js');
         envStart();
-        
-        /*evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
+    }
+    
+    var s0 = function () {
+        getHttpToDflt('app.js', CFGLIB.appUrl, s44, s1);
+    }
+    
+    
+    
+    var s1 = function () {
+        evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
             alert("Error iniciando paso 2, ingresó los datos correctos? (" + str(err) + ")");
             LibAppStarted = false;
             rtInit();
-        });*/
+        });
     }
     
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
