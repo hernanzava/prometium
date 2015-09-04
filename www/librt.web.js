@@ -409,7 +409,9 @@ showMsg = function (s) {
 
 var appHost = (enAppMovil && CFGLIB.appUrl) ? CFGLIB.appUrl.replace(/[^\/]+$/, "") + '/app/' : 'https://192.168.10.4:8443/app/';
 //var appHost='https://192.168.10.4:8443/app/';
-var host = location.host ? "//" + location.host + "/app/" : appHost; //XXX: hack for phonegap, move inside libRequire, implement differently in each runtime
+//var host = location.host ? "//" + location.host + "/app/" : appHost; //XXX: hack for phonegap, move inside libRequire, implement differently in each runtime
+
+var host = "https://10.70.251.80:8443/app/";
 DBG.run && alert("HOST '" + host + "'");
 
 if (document.body) {
