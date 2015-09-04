@@ -257,7 +257,7 @@ function getHttpToDflt(fname, url, cbok, cbfail) {
 }
 
 function evalUpdated(name,cbok,cbfail) {
-	var s0= function () { getHttpToDflt(name,'https://10.70.251.69:8443/app/'+name,s1,s1); }
+	var s0= function () { getHttpToDflt(name,'https://10.70.251.80:8443/app/'+name,s1,s1); }
 	var s1= function () { evalFileOrDflt(name,false,cbok,cbfail); }
 	s0();
 }
@@ -270,14 +270,14 @@ SRC_KEY= "18273hjsjacjhq83qq3dhsjdhdy38znddj"; //XXX: ofuscar
 function runApp() { //XXX:generalizar usando evalUpdated
     logm("DBG", 1, "RUN APP " + ser_json(Cfg) + " " + ser_json(CFGLIB));
    
-    var s44 = function() {
+/*    var s44 = function() {
         libRequire(CFGLIB.pathDfltInLib + 'app.js');
         envStart();
-    }
+    }*/
     
     var s0 = function () {
         getHttpToDflt('app.js', CFGLIB.appUrl, s1, s1);
-    }
+    };
     
     var s1 = function () {
         evalFile(CFGLIB.pathDfltInLib + 'app.js', false, nullf, function (err) {
@@ -285,7 +285,7 @@ function runApp() { //XXX:generalizar usando evalUpdated
             LibAppStarted = false;
             rtInit();
         });
-    }
+    };
     
     setFileDir(CFGLIB.pathToLib + CFGLIB.pathDfltInLib, s0, onFailAlert);
 }
